@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="75" tilewidth="8" tileheight="8" backgroundcolor="#ffaaff">
+ <tileset firstgid="1" name="path1" tilewidth="8" tileheight="8">
+  <image source="path1.png" trans="ffaec9" width="275" height="202"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="75">
+  <data encoding="base64" compression="zlib">
+   eJzt20EKwjAYROGqR9H7n1EKLkQqtXXa/C95H2TjasYpGESnSZIkSZIkSerPFX56cmkdIODWOkCQe9TiHrW4Ry3uUYt71LK2R+u77C932pH2qNCVkDGF0JWQMYXQlZAxhdCVkDGF0JWQMYXQlZAxhdCVkDGF0JWQMYXQlZAxhdCVkDGF0JWQMYXQlZAxhdCVkDGF0JWQMYXQlZAxhdCVkDGF0JWQMYXQdS3j/cRztB72mD1eZ+m15NniiM0pe4zCPWpxj1p62WPvZ0A1Lfb4fM/mPVr//qvKfxu27PH+/C09h//cVYiq37e/3R8J24z0HEmSJFV15vfOox5JkiRJkiRJkiRJkiQp5QkhIRxf
+  </data>
+ </layer>
+</map>

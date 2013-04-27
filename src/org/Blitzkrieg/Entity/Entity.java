@@ -6,8 +6,9 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class Entity {
+public class Entity{
 	protected Shape shape;
+	protected String name;
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 	}
 	public void render(GameContainer gc, StateBasedGame game, Graphics g)
