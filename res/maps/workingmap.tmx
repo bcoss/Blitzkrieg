@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="75" tilewidth="8" tileheight="8">
+ <tileset firstgid="1" name="road" tilewidth="8" tileheight="8">
+  <image source="road.png" width="40" height="9"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="75">
+  <data encoding="base64" compression="zlib">
+   eJzt2gGvgiAUBlCt/v9vfo8tN2cIWYAk52wsc2uln9xL1jQB8HgO+iGTfoQcbv/j3uGYKx53r5Y8jsyRx5vjW/Loa8ijbS/Ze69l34h5BLfnYw95rPfNjT9PL2J5tO7x8xSvV/Jo31OCpTbF5sdoUnmUsj7P8kjLzY8SUnms11LyiNemGnksj7HtvTxGtM1jva8Uebyvdh65WhWMmEdqvdljHt+uoX9Jbr1TO4/t+8a+f+TWyFeTOtba/SO2vho5iyB1zC37uTzyauWx3o7lkXr9FbM40g9b1qsa98SuJnZNfnqdHunVatW+kudEHvTu7P8otBy/rGT9UIeO264vt/eKcs9LGz2TM/LIzaeRpc537PtZyd+G1K1XR+fD1e99n611Hnp6mvkBAAAAAAAAAAAAAAAAAAAAXMkfdccIXw==
+  </data>
+ </layer>
+</map>
