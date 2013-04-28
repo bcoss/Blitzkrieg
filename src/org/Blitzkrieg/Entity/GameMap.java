@@ -19,14 +19,24 @@ public class GameMap {
 		BlockFinder(((GameState)game.getCurrentState()).getBlocks(), ((GameState)game.getCurrentState()).getDirectionBlocks());
 	}
 	
+	public int getWidth(){
+		return map.getWidth()*8;
+	}
+	public int getHeight(){
+		return map.getHeight()*8;
+	}
+	
 	private void BlockFinder(List<block> blocks, List<DirectionBlock> DirectionBlocks) {
 		for(int i =0; i<map.getLayerCount(); i++){
 			for(int j =0; j<map.getWidth(); j++){
 				for(int k =0; k<map.getHeight(); k++){
 					if(Boolean.parseBoolean(map.getTileProperty(map.getTileId(j, k, i), "move", "false"))) {
-						System.out.println("FOUND");
                         DirectionBlocks.add(new DirectionBlock(new Rectangle(j * map.getTileWidth(), k * map.getTileHeight(), 
-                                map.getTileWidth(), map.getTileHeight()), map.getTileProperty(map.getTileId(j, k, i), "direction", "null")));
+                                8, 8), map.getTileProperty(map.getTileId(j, k, i), "direction", "null")));
+                    }
+					else if (Boolean.parseBoolean(map.getTileProperty(map.getTileId(j, k, i), "solid", "false"))) {
+                        blocks.add(new block(new Rectangle(j * map.getTileWidth(), k * map.getTileHeight(), 
+                                8, 8)));
                     }
 				}
 			}

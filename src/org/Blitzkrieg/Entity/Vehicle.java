@@ -14,6 +14,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Vehicle extends Entity{
 	protected Shape UpDownShape;
 	protected Shape LeftRightShape;
+	protected double maxHp;
 	protected double hp;
 	protected double armour;
 	protected double speed;
@@ -25,10 +26,14 @@ public class Vehicle extends Entity{
 	protected Animation UpVehicle;
 	protected Animation DownVehicle;
 	protected String Direction;
+	protected double amount;
+	protected StateBasedGame game;
+	
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
+		this.game = game;
 		if(Direction.equals("right")){
 			Current = RightVehicle;
 			shape = LeftRightShape;
@@ -53,7 +58,7 @@ public class Vehicle extends Entity{
 		super.render(gc, game, g);
 		g.drawAnimation(Current, shape.getX(), shape.getY());
 		//g.setColor(Color.red);
-		//g.draw(new Rectangle(shape.getCenterX(), shape.getCenterY(), 1, 1));
+		//g.draw( new Rectangle((float) (shape.getCenterX()-speed), (float) (shape.getCenterY()-speed)+1, (int)(2*speed), (int)(2*speed)));
 	}
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int g)
@@ -80,28 +85,31 @@ public class Vehicle extends Entity{
 		shape.setLocation((int)xLocation, (int)yLocation);
 	}
 	private void directionChange(List<DirectionBlock> blocks) {
-		Shape test = new Rectangle(shape.getCenterX()-1, shape.getCenterY()-1, 2, 2);
+		Shape test = new Rectangle((float) (shape.getCenterX()-speed)-1, (float) (shape.getCenterY()-speed)-1, (int)(2*speed)+2, (int)(2*speed)+2);
 		Shape testShape;
 		for(DirectionBlock b : blocks){
 			testShape = new Rectangle(b.shape.getCenterX(), b.shape.getCenterY(), 0, 0);
 			if(test.intersects(testShape)){
 				if(!Direction.equals(b.getDirection())){
 					Direction = b.getDirection();
-					UpdateAnimation();
+					UpdateAnimation(b.shape.getCenterX(), b.shape.getCenterY());
 				}
 			}
 		}
 	}
-	private void HPDamage(double amount){
+	public void HPDamage(double amount){
 		hp-=(amount * (1-armour));
 		if(hp<=0){
+			hp = 0;
 			RemoveCar();
 		}
+		System.out.println(hp);
 	}
 	private void RemoveCar() {
-		
+		((GameState)game.getCurrentState()).removeCar(this);
+		speed = 20;
 	}
-	private void ArmorDamage(double amount){
+	public void ArmorDamage(double amount){
 		if(!(armour <= 0)){
 			armour-= amount;
 			if(armour <=0){
@@ -109,26 +117,36 @@ public class Vehicle extends Entity{
 			}
 		}
 	}
-	private void UpdateAnimation() {
+	private void UpdateAnimation(float xCenter, float yCenter) {
 		if(Direction.equals("left")){
 			Current = LeftVehicle;
-			yLocation+= (shape.getHeight()- (LeftRightShape.getHeight()*1.5) +1);
 			shape = LeftRightShape;
 		}
 		else if(Direction.equals("right")){
 			Current = RightVehicle;
-			yLocation+= (shape.getHeight()- (LeftRightShape.getHeight()*1.5) +1);
 			shape = LeftRightShape;			
 		}
 		else if(Direction.equals("up")){
 			Current = UpVehicle;
-			xLocation+= (shape.getWidth() -(UpDownShape.getWidth()*1.5)+1);
 			shape = UpDownShape;
 		}
 		else{
 			Current = DownVehicle;
-			xLocation+= (shape.getWidth() -(UpDownShape.getWidth()*1.5)+1);
 			shape = UpDownShape;
 		}
+		yLocation= yCenter - shape.getHeight()/2;
+		xLocation= xCenter - shape.getWidth()/2;
+	}
+	public boolean reward() {
+		if((maxHp * .5)> hp){
+			return true;
+		}
+		return false;
+	}
+	public Double getAmount() {
+		return amount - (amount*(hp/maxHp));
+	}
+	public Animation deadAnimation(){
+		return DownVehicle;
 	}
 }

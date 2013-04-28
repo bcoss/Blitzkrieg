@@ -3,7 +3,6 @@ package org.Blitzkrieg.Entity;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
@@ -24,7 +23,9 @@ public class Sedan extends Vehicle{
 		UpDownShape = new Rectangle((int)xLocation,(int)yLocation,36,70);
 		hp = 100;
 		armour= .1;
-		speed = 2;
+		speed = 4;
+		amount = 25;
+		maxHp = 100;
 		RightVehicle = new Animation(new SpriteSheet("res/images/entities/Sedan/Sedan.png", 70, 36), 300);
 		LeftVehicle = new Animation(new SpriteSheet("res/images/entities/Sedan/SedanLeft.png", 70, 36), 300);
 		UpVehicle = new Animation(new SpriteSheet("res/images/entities/Sedan/SedanUp.png", 36, 70), 300);
