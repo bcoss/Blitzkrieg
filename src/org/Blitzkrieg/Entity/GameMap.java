@@ -7,15 +7,18 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 
 public class GameMap {
 	private TiledMap map;
+	private StateBasedGame game;
 	public GameMap(String location) throws SlickException{
 		map = new TiledMap(location);
 	}
 	public void init(GameContainer gc, StateBasedGame game){
+		this.game = game;
 		BlockFinder(((GameState)game.getCurrentState()).getBlocks(), ((GameState)game.getCurrentState()).getDirectionBlocks());
 	}
 	
@@ -32,12 +35,15 @@ public class GameMap {
 				for(int k =0; k<map.getHeight(); k++){
 					if(Boolean.parseBoolean(map.getTileProperty(map.getTileId(j, k, i), "move", "false"))) {
                         DirectionBlocks.add(new DirectionBlock(new Rectangle(j * map.getTileWidth(), k * map.getTileHeight(), 
-                                8, 8), map.getTileProperty(map.getTileId(j, k, i), "direction", "null")));
+                        		map.getTileWidth(), map.getTileHeight()), map.getTileProperty(map.getTileId(j, k, i), "direction", "null")));
                     }
 					else if (Boolean.parseBoolean(map.getTileProperty(map.getTileId(j, k, i), "solid", "false"))) {
                         blocks.add(new block(new Rectangle(j * map.getTileWidth(), k * map.getTileHeight(), 
                                 8, 8)));
                     }
+					else if (Boolean.parseBoolean(map.getTileProperty(map.getTileId(j, k, i), "start", "false"))) {
+						((GameState)game.getCurrentState()).setStart(new Rectangle(j * map.getTileWidth(), k * map.getTileHeight(),  map.getTileWidth(), map.getTileHeight()));
+					}
 				}
 			}
 		}

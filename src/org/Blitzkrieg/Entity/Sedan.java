@@ -6,14 +6,13 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class Sedan extends Vehicle{
 	
-	public Sedan(int xStart, int yStart, String facing){
-		xLocation = xStart;
-		yLocation = yStart;
-		Direction = facing;
+	public Sedan(Shape start, String facing) {
+		super(start, facing);
 	}
 	
 	@Override

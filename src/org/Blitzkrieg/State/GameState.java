@@ -17,6 +17,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -37,6 +39,7 @@ public class GameState extends BasicGameState {
 	private int mouseY;
 	private int mouseX;
 	protected GameMap map;
+	protected Shape start;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
@@ -53,6 +56,7 @@ public class GameState extends BasicGameState {
 		TowerToPlace = null;
 		Score = 0;
 		dead = false;
+		start = new Rectangle(0,0,0,0);
 	}
 
 	
@@ -92,7 +96,7 @@ public class GameState extends BasicGameState {
 			}
 		}
 		if(key == Input.KEY_D){
-			cars.add(new Sedan(0, (33*8) + 2, "right"));
+			cars.add(new Sedan(start, "right"));
 			try {
 				cars.get(cars.size()-1).init(gc, game);
 			} catch (SlickException e) {
@@ -100,7 +104,7 @@ public class GameState extends BasicGameState {
 			}
 		}
 		if(key == Input.KEY_F){
-			cars.add(new wwRoach(0, (33*8)+2, "right"));
+			cars.add(new wwRoach(start, "right"));
 			try {
 				cars.get(cars.size()-1).init(gc, game);
 			} catch (SlickException e) {
@@ -130,7 +134,7 @@ public class GameState extends BasicGameState {
 			TowerToPlace.render(gc, game, g);
 		}
 		for(int i=0; i<penaltyCount; i++){
-			g.drawAnimation(penalty[i].deadAnimation(), i*75 + 48, 400);
+			g.drawAnimation(penalty[i].deadAnimation(), i*75 + 48, 460);
 		}
 		g.setColor(Color.white);
 		g.drawString("Money: " + Money + " K", 0, 0);
@@ -243,5 +247,17 @@ public class GameState extends BasicGameState {
 	}
 	public List<DirectionBlock> getDirectionBlocks() {
 		return DirectionBlocks;
+	}
+
+
+
+	public Shape getStart() {
+		return start;
+	}
+
+
+
+	public void setStart(Shape start) {
+		this.start = start;
 	}
 }

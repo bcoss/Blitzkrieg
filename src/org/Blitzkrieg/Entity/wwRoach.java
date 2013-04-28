@@ -6,16 +6,17 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class wwRoach extends Vehicle{
 	
-	public wwRoach(int xStart, int yStart, String facing){
-		xLocation = xStart;
-		yLocation = yStart;
-		Direction = facing;
-	}
+
 	
+	public wwRoach(Shape start, String facing) {
+		super(start, facing);
+		// TODO Auto-generated constructor stub
+	}
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {

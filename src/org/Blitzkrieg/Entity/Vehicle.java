@@ -29,6 +29,11 @@ public class Vehicle extends Entity{
 	protected double amount;
 	protected StateBasedGame game;
 	
+	public Vehicle(Shape start, String facing){
+		xLocation = start.getCenterX();
+		yLocation = start.getCenterY();
+		Direction = facing;
+	}
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
@@ -37,18 +42,26 @@ public class Vehicle extends Entity{
 		if(Direction.equals("right")){
 			Current = RightVehicle;
 			shape = LeftRightShape;
+			xLocation-=shape.getWidth();
+			yLocation-=(double)shape.getHeight()/2;
 		}
 		else if(Direction.equals("left")){
 			Current = LeftVehicle;
 			shape = LeftRightShape;
+			xLocation+=shape.getWidth();
+			yLocation-=(double)shape.getHeight()/2;
 		}
 		else if(Direction.equals("up")){
 			Current = UpVehicle;
 			shape = UpDownShape;
+			xLocation-=(double)shape.getWidth()/2;
+			yLocation+=(double)shape.getHeight();
 		}
 		else if(Direction.equals("down")){
 			Current = DownVehicle;
 			shape = UpDownShape;
+			xLocation-=(double)shape.getWidth()/2;
+			yLocation-=(double)shape.getHeight();
 		}
 		super.init(gc, game);
 	}
