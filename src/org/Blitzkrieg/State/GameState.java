@@ -40,6 +40,12 @@ public class GameState extends BasicGameState {
 	private int mouseX;
 	protected GameMap map;
 	protected Shape start;
+	protected int wave;
+	protected int numCars;
+	protected int time;
+	protected int frequency;
+	protected boolean startWave;
+	protected boolean waveFinished;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
@@ -47,6 +53,10 @@ public class GameState extends BasicGameState {
 		penaltyCount = 0;
 		this.gc = gc;
 		this.game = game;
+		time = 0;
+		wave = 1;
+		frequency = 0;
+		numCars = 0;
 		cars = new ArrayList<Vehicle>();
 		blocks = new ArrayList<block>();
 		DirectionBlocks = new ArrayList<DirectionBlock>();
@@ -57,6 +67,7 @@ public class GameState extends BasicGameState {
 		Score = 0;
 		dead = false;
 		start = new Rectangle(0,0,0,0);
+		waveFinished = true;
 	}
 
 	
@@ -94,6 +105,10 @@ public class GameState extends BasicGameState {
 					e.printStackTrace();
 				}
 			}
+		}
+		if(key == Input.KEY_ENTER){
+			if(waveFinished)
+				startWave = true;
 		}
 		if(key == Input.KEY_D){
 			cars.add(new Sedan(start, "right"));
@@ -188,8 +203,8 @@ public class GameState extends BasicGameState {
 			for(int i=0; i< DeadCars.size(); i++){
 				cars.remove(DeadCars.get(i));
 				DeadCars.get(i).update(gc, game, delta);
-				if(DeadCars.get(i).getShape().getX()>map.getWidth() || DeadCars.get(i).getShape().getX()<-100
-						|| DeadCars.get(i).getShape().getY()>map.getHeight() || DeadCars.get(i).getShape().getY()<-100){
+				if(DeadCars.get(i).getShape().getX()>map.getWidth() || DeadCars.get(i).getShape().getX()<-200
+						|| DeadCars.get(i).getShape().getY()>map.getHeight() || DeadCars.get(i).getShape().getY()<-200){
 					if(DeadCars.get(i).reward()){
 						Money+=DeadCars.get(i).getAmount();
 						Score+=DeadCars.get(i).getAmount();
@@ -219,7 +234,54 @@ public class GameState extends BasicGameState {
 		for(Tower t : towers){
 			t.update(gc, game, delta);
 		}
+		Wave();
+		if(numCars >0){
+			if(time == 0){
+				if(wave ==1){
+					cars.add(new Sedan(start,"right"));
+				}
+				else if(wave == 2){
+					if(numCars <5){
+						cars.add(new Sedan(start,"right"));
+					}
+					else{
+						cars.add(new wwRoach(start,"right"));
+					}
+				}
+				cars.get(cars.size()-1).init(gc, game);
+				numCars--;
+				
+			}
+			time+=delta;
+			if(time >frequency){
+				time = 0;
+			}
+		}
+		if(!waveFinished && cars.isEmpty()){
+			System.out.println("DONE");
+			waveFinished = true;
+			Money+= wave*10 +100;
+			wave ++;
+			time = 0;
+		}
 	}
+
+	private void Wave() {
+		if(startWave){
+			waveFinished = false;
+			startWave = false;
+				if(wave == 1){
+					numCars = 5;				
+					frequency = 2000;
+				}
+				else if(wave == 2){
+					numCars = 5;
+					frequency = 2000;
+				}
+		}
+	}
+
+
 
 	private void checkDead() {
 		if(penaltyCount==10){

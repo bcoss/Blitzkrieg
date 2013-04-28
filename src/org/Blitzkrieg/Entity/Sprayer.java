@@ -30,7 +30,7 @@ public class Sprayer extends Tower{
 		attacking = false;
 		HPDamage = 5;
 		ArmourDamage = 0;
-		range = 34;
+		range = 50;
 		price = 100;
 		super.init(gc, game);
 	}

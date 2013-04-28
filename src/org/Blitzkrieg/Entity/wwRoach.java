@@ -15,7 +15,6 @@ public class wwRoach extends Vehicle{
 	
 	public wwRoach(Shape start, String facing) {
 		super(start, facing);
-		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
@@ -24,8 +23,8 @@ public class wwRoach extends Vehicle{
 		UpDownShape = new Rectangle((int)xLocation,(int)yLocation,36,70);
 		hp = 70;
 		armour= .7;
-		speed = 1.5;
-		amount = 5;
+		speed = .8;
+		amount = 7;
 		maxHp = 70;
 		RightVehicle = new Animation(new SpriteSheet("res/images/entities/wwRoach/wwroach.png", 73, 36), 300);
 		LeftVehicle = new Animation(new SpriteSheet("res/images/entities/wwRoach/wwroachLeft.png", 73, 36), 300);

@@ -30,7 +30,7 @@ public class Hosedude extends Tower{
 		attacking = false;
 		HPDamage = 10;
 		ArmourDamage = 0;
-		range = 36;
+		range = 100;
 		price = 200;
 		super.init(gc, game);
 	}

@@ -18,7 +18,7 @@ public class Sedan extends Vehicle{
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
-		LeftRightShape = new Rectangle((int)xLocation,(int)yLocation,70,36);
+		LeftRightShape = new Rectangle(-100,-100,70,36);
 		UpDownShape = new Rectangle((int)xLocation,(int)yLocation,36,70);
 		hp = 100;
 		armour= .1;

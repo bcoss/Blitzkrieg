@@ -13,7 +13,7 @@ public class DirectionBlock extends block{
 		super(shape);
 		this.direction = direction;
 		name = "direction";
-		System.out.println(direction);
+		//System.out.println(direction);
 	}
 	public String getDirection() {
 		return direction;
