@@ -30,6 +30,8 @@ public class GameState extends BasicGameState {
 	protected Tower TowerToPlace;
 	private GameContainer gc;
 	private StateBasedGame game;
+	protected double Score;
+	protected boolean dead;
 	private int mouseY;
 	private int mouseX;
 	protected GameMap map;
@@ -47,6 +49,8 @@ public class GameState extends BasicGameState {
 		DeadCars = new ArrayList<Vehicle>();
 		Money = 300.0;
 		TowerToPlace = null;
+		Score = 0;
+		dead = false;
 	}
 
 	
@@ -74,7 +78,6 @@ public class GameState extends BasicGameState {
 			try {
 				cars.get(cars.size()-1).init(gc, game);
 			} catch (SlickException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -101,10 +104,11 @@ public class GameState extends BasicGameState {
 			TowerToPlace.render(gc, game, g);
 		}
 		for(int i=0; i<penaltyCount; i++){
-			g.drawAnimation(penalty[i].deadAnimation(), i*50 + 3, 400);
+			g.drawAnimation(penalty[i].deadAnimation(), i*75 + 48, 400);
 		}
 		g.setColor(Color.white);
 		g.drawString("Money: " + Money + " K", 0, 0);
+		g.drawString("Score: " + Score, 0,580);
 	}
 	
 
@@ -150,24 +154,27 @@ public class GameState extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int delta)
 			throws SlickException {
-		for(int i=0; i< DeadCars.size(); i++){
-			cars.remove(DeadCars.get(i));
-			DeadCars.get(i).update(gc, game, delta);
-			if(DeadCars.get(i).getShape().getX()>map.getWidth() || DeadCars.get(i).getShape().getX()<-100
-					|| DeadCars.get(i).getShape().getY()>map.getHeight() || DeadCars.get(i).getShape().getY()<-100){
-				if(DeadCars.get(i).reward()){
-					Money+=DeadCars.get(i).getAmount();
-					DeadCars.remove(i);
-					i--;
-				}
-				else{
-					
-					penalty[penaltyCount] = DeadCars.get(i);
-					penaltyCount++;
-					DeadCars.remove(i);
+		if(!dead){
+			for(int i=0; i< DeadCars.size(); i++){
+				cars.remove(DeadCars.get(i));
+				DeadCars.get(i).update(gc, game, delta);
+				if(DeadCars.get(i).getShape().getX()>map.getWidth() || DeadCars.get(i).getShape().getX()<-100
+						|| DeadCars.get(i).getShape().getY()>map.getHeight() || DeadCars.get(i).getShape().getY()<-100){
+					if(DeadCars.get(i).reward()){
+						Money+=DeadCars.get(i).getAmount();
+						Score+=DeadCars.get(i).getAmount();
+						DeadCars.remove(i);
+						i--;
+					}
+					else{
+
+						penalty[penaltyCount] = DeadCars.get(i);
+						penaltyCount++;
+						DeadCars.remove(i);
+					}
 				}
 			}
-			
+			checkDead();
 		}
 		for(int i=0; i< cars.size(); i++){
 			cars.get(i).update(gc, game, delta);
@@ -183,6 +190,15 @@ public class GameState extends BasicGameState {
 			t.update(gc, game, delta);
 		}
 	}
+
+	private void checkDead() {
+		if(penaltyCount==10){
+			dead=true;
+		}
+		
+	}
+
+
 
 	public void removeCar(Vehicle v){
 		DeadCars.add(v);

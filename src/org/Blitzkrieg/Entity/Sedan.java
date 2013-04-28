@@ -23,7 +23,7 @@ public class Sedan extends Vehicle{
 		UpDownShape = new Rectangle((int)xLocation,(int)yLocation,36,70);
 		hp = 100;
 		armour= .1;
-		speed = 4;
+		speed = 1;
 		amount = 25;
 		maxHp = 100;
 		RightVehicle = new Animation(new SpriteSheet("res/images/entities/Sedan/Sedan.png", 70, 36), 300);

@@ -16,7 +16,6 @@ public class LevelOne extends GameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame game) throws SlickException {
 		super.init(gc, game);
-		cars.add(new Sedan(0, (33*8) + 2, "right"));
 		map = new GameMap("res/maps/test.tmx");
 		for(Vehicle v : cars){
 			v.init(gc, game);
