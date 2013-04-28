@@ -6,11 +6,13 @@ import java.util.List;
 
 import org.Blitzkrieg.Entity.DirectionBlock;
 import org.Blitzkrieg.Entity.GameMap;
+import org.Blitzkrieg.Entity.Hosedude;
 import org.Blitzkrieg.Entity.Sedan;
 import org.Blitzkrieg.Entity.Sprayer;
 import org.Blitzkrieg.Entity.Tower;
 import org.Blitzkrieg.Entity.Vehicle;
 import org.Blitzkrieg.Entity.block;
+import org.Blitzkrieg.Entity.wwRoach;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -61,8 +63,24 @@ public class GameState extends BasicGameState {
 			if(key == Input.KEY_1){
 				TowerToPlace = new Sprayer();
 				try {
-					if((int)(Money-TowerToPlace.Amount())>0){
-						TowerToPlace.init(gc, game, mouseX, mouseY);
+					TowerToPlace.init(gc, game, mouseX, mouseY);
+					if((int)(Money-TowerToPlace.Amount())>=0){
+						
+						Money -= TowerToPlace.Amount();
+					}
+					else
+						TowerToPlace = null;
+
+				} catch (SlickException e) {
+					e.printStackTrace();
+				}
+			}
+			else if(key == Input.KEY_2){
+				TowerToPlace = new Hosedude();
+				try {
+					TowerToPlace.init(gc, game, mouseX, mouseY);
+					if((int)(Money-TowerToPlace.Amount())>=0){
+						
 						Money -= TowerToPlace.Amount();
 					}
 					else
@@ -75,6 +93,14 @@ public class GameState extends BasicGameState {
 		}
 		if(key == Input.KEY_D){
 			cars.add(new Sedan(0, (33*8) + 2, "right"));
+			try {
+				cars.get(cars.size()-1).init(gc, game);
+			} catch (SlickException e) {
+				e.printStackTrace();
+			}
+		}
+		if(key == Input.KEY_F){
+			cars.add(new wwRoach(0, (33*8)+2, "right"));
 			try {
 				cars.get(cars.size()-1).init(gc, game);
 			} catch (SlickException e) {

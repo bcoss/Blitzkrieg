@@ -15,23 +15,23 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class Sprayer extends Tower{
+public class Hosedude extends Tower{
 
 	private Animation spray;
 	private Boolean attacking;
-
+	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game, int mouseX, int mouseY)
 			throws SlickException {
-		image = new Image("res/images/entities/Sprayer/Sprayer.png");
-		spray = new Animation(new SpriteSheet("res/images/entities/Sprayer/SprayerAttack.png", 24, 24), 200);
+		image = new Image("res/images/entities/Hosedude/hosedudeImage.png");
+		spray = new Animation(new SpriteSheet("res/images/entities/Hosedude/hosedude.png", 24, 24), 300);
 		spray.setLooping(false);
 		shape = new Rectangle(mouseX-12,mouseY-12,24,24);
 		attacking = false;
-		HPDamage = 5;
+		HPDamage = 10;
 		ArmourDamage = 0;
-		range = 34;
-		price = 100;
+		range = 36;
+		price = 200;
 		super.init(gc, game);
 	}
 
@@ -51,7 +51,8 @@ public class Sprayer extends Tower{
 			for(Vehicle v : cars){
 				if(Target.intersects(v.shape)){
 					attacking = true;
-					AttackTarget(v);
+					AttackTarget(v, cars);
+					break;
 				}
 			}
 		}
@@ -71,8 +72,13 @@ public class Sprayer extends Tower{
 		}
 	}
 
-	protected void AttackTarget(Vehicle v) {	
-		DamageCar(v);
+	protected void AttackTarget(Vehicle target, List<Vehicle> cars) {
+		Shape aoe = new Circle(target.shape.getCenterX(), target.shape.getCenterY(), 21);
+		for(Vehicle v : cars){
+			if(aoe.intersects(v.shape)){
+				DamageCar(v);
+			}
+		}
 	}
 	protected void DamageCar(Vehicle v){
 		v.HPDamage(HPDamage);
