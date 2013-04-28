@@ -116,7 +116,7 @@ public class Vehicle extends Entity{
 			hp = 0;
 			RemoveCar();
 		}
-		System.out.println(hp);
+		//System.out.println(hp);
 	}
 	private void RemoveCar() {
 		((GameState)game.getCurrentState()).removeCar(this);
@@ -158,6 +158,9 @@ public class Vehicle extends Entity{
 	}
 	public Double getAmount() {
 		return amount - (amount*(hp/maxHp));
+	}
+	public double getHP(){
+		return hp;
 	}
 	public Animation deadAnimation(){
 		return DownVehicle;

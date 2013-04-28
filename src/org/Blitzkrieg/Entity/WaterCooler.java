@@ -15,53 +15,43 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class Sprayer extends Tower{
+public class WaterCooler extends Tower{
 
-	private Animation spray;
+	private Animation cooling;
 	private Boolean attacking;
-	private Animation DeadSpray;
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame game, int mouseX, int mouseY)
 			throws SlickException {
-		image = new Image("res/images/entities/Sprayer/Sprayer.png");
-		spray = new Animation(new SpriteSheet("res/images/entities/Sprayer/SprayerAttack.png", 24, 24), 200);
-		DeadSpray = new Animation(new SpriteSheet("res/images/entities/Sprayer/SprayerFail.png", 24, 24), 200);
-		spray.setLooping(false);
+		cooling = new Animation(new SpriteSheet("res/images/entities/WaterCooler/waterCooler.png", 24, 24), 200);
+		image = cooling.getImage(0);
+		cooling.setLooping(false);
 		shape = new Rectangle(mouseX-12,mouseY-12,24,24);
 		attacking = false;
-		HPDamage = 5;
+		HPDamage = 10;
 		ArmourDamage = 0;
 		range = 50;
-		price = 100;
-		moral = 100;
+		price = 50;
 		super.init(gc, game);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame game, int g)
 			throws SlickException {
-		TargetCheck(((GameState)game.getCurrentState()).getCars());
-		if(spray.isStopped() && !dead && placed){
-			//System.out.println(moral);
-			moral-=5;
-			if(moral<=0){
-				dead = true;
-			}
-			else{
-				attacking = false;
-				spray.restart();
-			}
+		TargetCheck(((GameState)game.getCurrentState()).getTowers());
+		if(cooling.isStopped()){
+			attacking = false;
+			cooling.restart();
 		}
 		super.update(gc, game, g);
 	}
-	private void TargetCheck(List<Vehicle> cars) {
+	private void TargetCheck(List<Tower> tower) {
 		if(!attacking){
 			Shape Target = new Circle(shape.getCenterX(), shape.getCenterY(), range);
-			for(Vehicle v : cars){
-				if(Target.intersects(v.shape)){
+			for(Tower t : tower){
+				if(Target.intersects(t.shape)){
 					attacking = true;
-					AttackTarget(v);
+					AttackTarget(t);
 				}
 			}
 		}
@@ -73,21 +63,19 @@ public class Sprayer extends Tower{
 			g.setColor(Color.blue);
 			g.fill(shape);
 		}
-		if(!dead){
-			if(!attacking){
-				g.drawImage(image, shape.getX(), shape.getY());
-			}
-			else{
-				g.drawAnimation(spray, shape.getX(), shape.getY());
-			}
+		if(!attacking){
+			g.drawImage(image, shape.getX(), shape.getY());
 		}
 		else{
-			g.drawAnimation(DeadSpray, shape.getX(), shape.getY());
+			g.drawAnimation(cooling, shape.getX(), shape.getY());
 		}
 	}
 
-	protected void AttackTarget(Vehicle v) {	
-		DamageCar(v);
+	protected void AttackTarget(Tower t) {	
+		t.moral+=HPDamage;
+		if(t.moral>100){
+			t.moral=100;
+		}
 	}
 
 	

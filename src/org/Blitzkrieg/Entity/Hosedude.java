@@ -19,12 +19,14 @@ public class Hosedude extends Tower{
 
 	private Animation spray;
 	private Boolean attacking;
+	private Animation deadMan;
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game, int mouseX, int mouseY)
 			throws SlickException {
 		image = new Image("res/images/entities/Hosedude/hosedudeImage.png");
 		spray = new Animation(new SpriteSheet("res/images/entities/Hosedude/hosedude.png", 24, 24), 300);
+		deadMan =  new Animation(new SpriteSheet("res/images/entities/Hosedude/deadguy.png", 24, 24), 300); 
 		spray.setLooping(false);
 		shape = new Rectangle(mouseX-12,mouseY-12,24,24);
 		attacking = false;
@@ -32,6 +34,7 @@ public class Hosedude extends Tower{
 		ArmourDamage = 0;
 		range = 100;
 		price = 200;
+		moral = 100;
 		super.init(gc, game);
 	}
 
@@ -39,9 +42,16 @@ public class Hosedude extends Tower{
 	public void update(GameContainer gc, StateBasedGame game, int g)
 			throws SlickException {
 		TargetCheck(((GameState)game.getCurrentState()).getCars());
-		if(spray.isStopped()){
-			attacking = false;
-			spray.restart();
+		if(spray.isStopped() && !dead && placed){
+			System.out.println(moral);
+			moral-=5;
+			if(moral<=0){
+				dead = true;
+			}
+			else{
+				attacking = false;
+				spray.restart();
+			}
 		}
 		super.update(gc, game, g);
 	}
@@ -64,11 +74,16 @@ public class Hosedude extends Tower{
 			g.setColor(Color.blue);
 			g.fill(shape);
 		}
-		if(!attacking){
-			g.drawImage(image, shape.getX(), shape.getY());
+		if(!dead){
+			if(!attacking){
+				g.drawImage(image, shape.getX(), shape.getY());
+			}
+			else{
+				g.drawAnimation(spray, shape.getX(), shape.getY());
+			}
 		}
 		else{
-			g.drawAnimation(spray, shape.getX(), shape.getY());
+			g.drawAnimation(deadMan, shape.getX(), shape.getY());
 		}
 	}
 
@@ -79,10 +94,6 @@ public class Hosedude extends Tower{
 				DamageCar(v);
 			}
 		}
-	}
-	protected void DamageCar(Vehicle v){
-		v.HPDamage(HPDamage);
-		v.ArmorDamage(ArmourDamage);
 	}
 	
 }

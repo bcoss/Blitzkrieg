@@ -2,21 +2,29 @@ package org.Blitzkrieg.State;
 
 import org.newdawn.slick.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
+import org.Blitzkrieg.Entity.Cruiser;
 import org.Blitzkrieg.Entity.DirectionBlock;
 import org.Blitzkrieg.Entity.GameMap;
 import org.Blitzkrieg.Entity.Hosedude;
 import org.Blitzkrieg.Entity.Sedan;
 import org.Blitzkrieg.Entity.Sprayer;
 import org.Blitzkrieg.Entity.Tower;
+import org.Blitzkrieg.Entity.Truck;
+import org.Blitzkrieg.Entity.Van;
 import org.Blitzkrieg.Entity.Vehicle;
+import org.Blitzkrieg.Entity.WaterCooler;
 import org.Blitzkrieg.Entity.block;
 import org.Blitzkrieg.Entity.wwRoach;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
@@ -24,10 +32,12 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class GameState extends BasicGameState {
 	protected List<Vehicle> cars;
+	protected List<Vehicle> waveCars;
 	protected List<Vehicle> DeadCars;
 	private List<block> blocks;
 	protected List<DirectionBlock> DirectionBlocks;
 	protected Vehicle[] penalty;
+	protected Animation[] towerDisplay;
 	protected int penaltyCount;
 	protected List<Tower> towers;
 	protected Double Money;
@@ -53,9 +63,10 @@ public class GameState extends BasicGameState {
 		penaltyCount = 0;
 		this.gc = gc;
 		this.game = game;
+		waveCars = new ArrayList<Vehicle>();
 		time = 0;
 		wave = 1;
-		frequency = 0;
+		frequency = 2000;
 		numCars = 0;
 		cars = new ArrayList<Vehicle>();
 		blocks = new ArrayList<block>();
@@ -68,6 +79,9 @@ public class GameState extends BasicGameState {
 		dead = false;
 		start = new Rectangle(0,0,0,0);
 		waveFinished = true;
+		towerDisplay[0] = new Animation(new SpriteSheet("res/images/entities/Sprayer/SprayerAttack.png", 24, 24), 200);
+		towerDisplay[1] = new Animation(new SpriteSheet("res/images/entities/Hosedude/hosedude.png", 24, 24), 300);
+		towerDisplay[2] = new Animation(new SpriteSheet("res/images/entities/WaterCooler/waterCooler.png", 24, 24), 200);
 	}
 
 	
@@ -105,24 +119,35 @@ public class GameState extends BasicGameState {
 					e.printStackTrace();
 				}
 			}
+			else if(key == Input.KEY_3){
+				TowerToPlace = new WaterCooler();
+				try {
+					TowerToPlace.init(gc, game, mouseX, mouseY);
+					if((int)(Money-TowerToPlace.Amount())>=0){
+						
+						Money -= TowerToPlace.Amount();
+					}
+					else
+						TowerToPlace = null;
+
+				} catch (SlickException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		if(key == Input.KEY_ENTER){
 			if(waveFinished)
 				startWave = true;
 		}
 		if(key == Input.KEY_D){
-			cars.add(new Sedan(start, "right"));
-			try {
-				cars.get(cars.size()-1).init(gc, game);
-			} catch (SlickException e) {
-				e.printStackTrace();
-			}
+			Money+=1000;
 		}
 		if(key == Input.KEY_F){
-			cars.add(new wwRoach(start, "right"));
+			cars.add(new Truck(start, "right"));
 			try {
 				cars.get(cars.size()-1).init(gc, game);
 			} catch (SlickException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -154,6 +179,16 @@ public class GameState extends BasicGameState {
 		g.setColor(Color.white);
 		g.drawString("Money: " + Money + " K", 0, 0);
 		g.drawString("Score: " + Score, 0,580);
+		g.drawString("Wave:" + wave, 700, 0);
+		for(int i =0; i<towerDisplay.length; i++){
+			g.drawAnimation(towerDisplay[i], 40 + 1, 1);
+		}
+		if(waveFinished){
+			g.drawString("Press Enter To Start Wave", 250, 250);
+		}
+		else{
+			g.drawString("Cars Left to spawn:" + numCars, 250, 0);
+		}
 	}
 	
 
@@ -223,8 +258,8 @@ public class GameState extends BasicGameState {
 		}
 		for(int i=0; i< cars.size(); i++){
 			cars.get(i).update(gc, game, delta);
-			if(cars.get(i).getShape().getX()>map.getWidth() || cars.get(i).getShape().getX()<-100
-					|| cars.get(i).getShape().getY()>map.getHeight() || cars.get(i).getShape().getY()<-100){
+			if(cars.get(i).getShape().getX()>map.getWidth() || cars.get(i).getShape().getX()<-200
+					|| cars.get(i).getShape().getY()>map.getHeight() || cars.get(i).getShape().getY()<-200){
 					DeadCars.add(cars.get(i));
 					cars.remove(i);
 					i--;
@@ -236,48 +271,56 @@ public class GameState extends BasicGameState {
 		}
 		Wave();
 		if(numCars >0){
-			if(time == 0){
-				if(wave ==1){
-					cars.add(new Sedan(start,"right"));
-				}
-				else if(wave == 2){
-					if(numCars <5){
-						cars.add(new Sedan(start,"right"));
-					}
-					else{
-						cars.add(new wwRoach(start,"right"));
-					}
-				}
-				cars.get(cars.size()-1).init(gc, game);
+			if(time ==0){
+				cars.add(waveCars.get(numCars-1));
 				numCars--;
-				
 			}
+			
 			time+=delta;
 			if(time >frequency){
 				time = 0;
 			}
 		}
-		if(!waveFinished && cars.isEmpty()){
-			System.out.println("DONE");
+		if(!waveFinished && cars.isEmpty() && numCars ==0){
+			//System.out.println("DONE");
 			waveFinished = true;
 			Money+= wave*10 +100;
 			wave ++;
 			time = 0;
+			if(frequency >=100){
+				frequency -=50;
+			}
+			waveCars.clear();
 		}
 	}
 
-	private void Wave() {
+	private void Wave() throws SlickException {
 		if(startWave){
 			waveFinished = false;
 			startWave = false;
-				if(wave == 1){
-					numCars = 5;				
-					frequency = 2000;
+			numCars = 5 + wave;
+			for(int i=0; i<numCars; i++){
+				if (wave-i>=10){
+					waveCars.add(new Truck(start, "right"));
 				}
-				else if(wave == 2){
-					numCars = 5;
-					frequency = 2000;
+				else if(wave-i>=7){
+					waveCars.add(new Van(start, "right"));
 				}
+				else if(wave-i>=5){
+					waveCars.add(new Cruiser(start, "right"));
+				}
+				else if (wave-i>=3){
+					waveCars.add(new wwRoach(start, "right"));
+				}
+				else{
+					waveCars.add(new Sedan(start, "right"));
+				}
+			}
+			for(Vehicle v : waveCars){
+				v.init(gc, game);
+			}
+			Collections.shuffle(waveCars, new Random());
+			
 		}
 	}
 
@@ -302,6 +345,9 @@ public class GameState extends BasicGameState {
 
 	public List<block> getBlocks() {
 		return blocks;
+	}
+	public List<Tower> getTowers(){
+		return towers;
 	}
 
 	public List<Vehicle> getCars() {

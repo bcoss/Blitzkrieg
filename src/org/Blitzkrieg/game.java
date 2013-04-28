@@ -20,7 +20,7 @@ public class game extends StateBasedGame {
          * Create a new test
          */
         public game() {
-                super("State Based Test");
+                super("Blitzkrieg");
         }
         
         /**

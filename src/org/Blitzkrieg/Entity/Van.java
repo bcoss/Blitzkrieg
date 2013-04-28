@@ -9,27 +9,27 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class wwRoach extends Vehicle{
+public class Van extends Vehicle{
 	
 
-	
-	public wwRoach(Shape start, String facing) {
+	public Van(Shape start, String facing) {
 		super(start, facing);
 	}
+	
 	@Override
 	public void init(GameContainer gc, StateBasedGame game)
 			throws SlickException {
-		LeftRightShape = new Rectangle(-100,-100,70,36);
-		UpDownShape = new Rectangle((int)xLocation,(int)yLocation,36,70);
-		hp = 70;
-		armour= .7;
-		speed = .8;
-		amount = 7;
-		maxHp = 70;
-		RightVehicle = new Animation(new SpriteSheet("res/images/entities/wwRoach/wwroach.png", 73, 36), 300);
-		LeftVehicle = new Animation(new SpriteSheet("res/images/entities/wwRoach/wwroachLeft.png", 73, 36), 300);
-		UpVehicle = new Animation(new SpriteSheet("res/images/entities/wwRoach/wwroachUp.png", 36, 73), 300);
-		DownVehicle = new Animation(new SpriteSheet("res/images/entities/wwRoach/wwroachDown.png", 36, 73), 300);
+		LeftRightShape = new Rectangle(-100,-100,123,36);
+		UpDownShape = new Rectangle((int)xLocation,(int)yLocation,50,123);
+		hp = 300;
+		armour= .5;
+		speed = .6;
+		amount = 15;
+		maxHp = 300;
+		RightVehicle = new Animation(new SpriteSheet("res/images/entities/Van/Van.png", 82, 34), 300);
+		LeftVehicle = new Animation(new SpriteSheet("res/images/entities/Van/VanLeft.png", 82, 34), 300);
+		UpVehicle = new Animation(new SpriteSheet("res/images/entities/Van/VanUp.png", 34, 82), 300);
+		DownVehicle = new Animation(new SpriteSheet("res/images/entities/Van/VanDown.png", 34, 82), 300);
 		super.init(gc, game);
 	}
 	@Override

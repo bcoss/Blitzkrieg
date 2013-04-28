@@ -15,12 +15,13 @@ public class Tower extends Entity{
 	protected Image image;
 	protected boolean placed;
 	protected double price;
-	
+	protected boolean dead;
 	
 	public void init(GameContainer gc, StateBasedGame game, int mouseX, int mouseY)
 			throws SlickException {
 		super.init(gc, game);
 		placed = false;
+		dead = false;
 	}
 	
 	@Override
@@ -33,6 +34,12 @@ public class Tower extends Entity{
 	public void update(GameContainer gc, StateBasedGame game, int g)
 			throws SlickException {
 		super.update(gc, game, g);
+	}
+	protected void DamageCar(Vehicle v){
+		if(v.getHP()>0){
+			v.HPDamage(HPDamage);
+			v.ArmorDamage(ArmourDamage);
+		}
 	}
 	
 	public void placed(){
